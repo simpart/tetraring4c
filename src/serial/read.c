@@ -9,7 +9,7 @@
 #include "ttr.h"
 
 
-void start_read (int fd, void (*cb)(unsigned char *)) {
+void start_read (int fd, void (*cb)(unsigned char *, int)) {
     unsigned char buf[255] = {0};
     int len  = 0;
     
@@ -17,7 +17,7 @@ void start_read (int fd, void (*cb)(unsigned char *)) {
         memset(&buf[0], 0x00, sizeof(buf));
         len = read(fd, buf, sizeof(buf));
         if (0 < len) {
-            cb(buf);
+            cb(buf, len);
         }
     }
 }
