@@ -24,11 +24,13 @@ typedef struct ttr_nw_rcvinf {
     int     sock;
     uint8_t *buf;
     size_t  size;
+    void    *callback;
 } ttr_nw_rcvinf_t;
 
 /*** prototype ***/
 int ttr_nw_init(char *, uint8_t *, size_t);
 int ttr_nw_rcvloop (int, void (*)(uint8_t *, size_t));
-
+void * ttr_nw_thdwrp (void *);
+int ttr_nw_rcvloop_thd (int, void (*)(uint8_t *, size_t), pthread_t *);
 #endif
 /* end of file */

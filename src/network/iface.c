@@ -3,6 +3,8 @@
  * @brief receive function from network interface
  */
 /*** include ***/
+#include <stdio.h>
+#include "pthread.h"
 #include "ttr/com.h"
 #include "ttr/network.h"
 
@@ -30,6 +32,7 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     int sock = 0;
     
     if ((NULL == ifnm) || (NULL == buf)) {
+        printf("invalid parameter\n");
         return TTR_NG;
     }
     
@@ -40,6 +43,7 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     
     /* set ifname */
     if (strlen( ifnm ) >= sizeof(iface.ifr_name)) {
+        printf("too long ifname\n");
         return TTR_NG;
     }
     strncpy(
@@ -51,11 +55,13 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     sock = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
     if (sock < 0) {
         perror("socket");
+        printf("socket error\n");
         return TTR_NG;
     }
     
     if ((ret = ioctl(sock, SIOCGIFINDEX, &iface)) < 0) {
         perror("siocgifindex");
+        printf("failed ioctl\n");
         close(sock);
         return TTR_NG;
     }
@@ -70,13 +76,13 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     mreq.mr_ifindex = iface.ifr_ifindex;
     if(setsockopt(sock, SOL_PACKET, PACKET_ADD_MEMBERSHIP,
             (void *)&mreq, sizeof(mreq)) < 0){
-        perror("setsockopt error");
+        printf("setsockopt error\n");
         close(sock);
         return TTR_NG;
     }
     
     if ((ret = bind(sock, (const struct sockaddr *)&sa, sizeof(sa))) < 0) {
-        perror("bind");
+        printf("bind error\n");
         close(sock);
         return TTR_NG;
     }
@@ -90,6 +96,7 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
         }
     }
     if (TTR_NW_IFNCT == idx) {
+        printf("rcv_info is full\n");
         return TTR_NG;
     }
     
@@ -138,3 +145,44 @@ int ttr_nw_rcvloop (int sck, void (*cb)(uint8_t *, size_t)) {
     close(g_rcv[sck_idx].sock);
     return TTR_OK;
 }
+
+void * ttr_nw_thdwrp (void *prm) {
+    ttr_nw_rcvinf_t *rcv_inf = NULL;
+    
+    if (NULL == prm) {
+        return NULL;
+    }
+    rcv_inf = (ttr_nw_rcvinf_t *) prm;
+    
+    if(TTR_OK != ttr_nw_rcvloop(rcv_inf->sock, rcv_inf->callback)) {
+        return NULL;
+    }
+    
+    return NULL;
+}
+
+int ttr_nw_rcvloop_thd (int sck, void (*cb)(uint8_t *, size_t), pthread_t * thd) {
+    int loop    = 0;
+    int sck_idx = 0;
+    
+    if (NULL == thd) {
+        return TTR_NG;
+    }
+    
+    /* get socket index */
+    for (loop=0; loop < TTR_NW_IFNCT ;loop++) {
+        if (g_rcv[loop].sock == sck) {
+            sck_idx = loop;
+            break;
+        }
+    }
+    if (TTR_NG == sck_idx) {
+        return TTR_NG;
+    }
+    
+    g_rcv[sck_idx].callback = cb; 
+    
+    pthread_create(thd, NULL, &ttr_nw_thdwrp, &(g_rcv[sck_idx]));
+    return TTR_OK;
+}
+/* end of file */
