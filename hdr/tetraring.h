@@ -2,8 +2,8 @@
  * @file tetraring.h
  * @author simpart
  */
-#ifndef __TTR_H__
-#define __TTR_H__
+#ifndef __TETRARING_H__
+#define __TETRARING_H__
 
 #include "ttr/com.h"
 #include "ttr/serial.h"
