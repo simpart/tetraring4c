@@ -2,8 +2,8 @@
  * @file network.h
  * @author simpart
  */
-#ifndef __NETWORK_H__
-#define __NETWORK_H__
+#ifndef __TTR_NETWORK_H__
+#define __TTR_NETWORK_H__
 
 /*** include ***/
 #include <stdio.h>

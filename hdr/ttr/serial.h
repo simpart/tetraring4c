@@ -2,8 +2,8 @@
  * @file ttr/serial.h
  * @author simpart
  */
-#ifndef __SERIAL_H__
-#define __SERIAL_H__
+#ifndef __TTR_SERIAL_H__
+#define __TTR_SERIAL_H__
 
 /*** include ***/
 #include <stdio.h>

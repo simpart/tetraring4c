@@ -8,5 +8,8 @@
 #define TTR_OK 0
 #define TTR_NG -1
 
+#define TTR_TRUE 1
+#define TTR_FALSE 0
+
 #endif
 /* end of file */
