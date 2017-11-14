@@ -7,7 +7,7 @@
 #include "ttr/network.h"
 
 /*** global ***/
-ttr_nw_rcvinf_t g_rcv;
+ttr_nw_rcvinf_t g_rcv[TTR_NW_IFNCT];
 
 /*** function ***/
 /**
@@ -24,6 +24,8 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     struct sockaddr_ll sa;
     struct packet_mreq mreq;
     struct ifreq       iface;
+    ttr_nw_rcvinf_t rcv_cmp;
+    int idx  = 0;
     int ret  = 0;
     int sock = 0;
     
@@ -32,8 +34,9 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     }
     
     /* initialize value */
-    memset(&iface, 0x00, sizeof(iface));
-    memset(&sa,    0x00, sizeof(sa));
+    memset(&iface,   0x00, sizeof(iface));
+    memset(&sa,      0x00, sizeof(sa));
+    memset(&rcv_cmp, 0x00, sizeof(ttr_nw_rcvinf_t));
     
     /* set ifname */
     if (strlen( ifnm ) >= sizeof(iface.ifr_name)) {
@@ -78,37 +81,60 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
         return TTR_NG;
     }
     
-    g_rcv.sock = sock;
-    g_rcv.buf  = buf;
-    g_rcv.size = size;
+    for (idx=0; idx < TTR_NW_IFNCT ;idx++) {
+        if (0 == memcmp(&g_rcv[idx], &rcv_cmp, sizeof(ttr_nw_rcvinf_t))) {
+            g_rcv[idx].sock = sock;
+            g_rcv[idx].buf  = buf;
+            g_rcv[idx].size = size;
+            break;
+        }
+    }
+    if (TTR_NW_IFNCT == idx) {
+        return TTR_NG;
+    }
     
     return sock;
 }
 
 /**
  * start frame receive loop
- *
+ * 
+ * @param[in] sck : target socket
  * @param[in] cb : receive callback function
  * @return TTR_OK : finish receive
  * @return TTR_NG : failed receive
  */
-int ttr_nw_rcvloop (void (*cb)(uint8_t *, size_t)) {
-    int len = 0;
+int ttr_nw_rcvloop (int sck, void (*cb)(uint8_t *, size_t)) {
+    int len     = 0;
+    int loop    = 0;
+    int sck_idx = TTR_NG;
     
     if (NULL == cb) {
         return TTR_NG;
     }
     
+    /* get socket index */
+    for (loop=0; loop < TTR_NW_IFNCT ;loop++) {
+        if (g_rcv[loop].sock == sck) {
+            sck_idx = loop;
+            break;
+        }
+    }
+    if (TTR_NG == sck_idx) {
+        return TTR_NG;
+    }
+    
+    
     while(1) {
-        memset(&(g_rcv.buf[0]), 0x00, g_rcv.size);
-        len = recv(g_rcv.sock, g_rcv.buf, g_rcv.size, 0);
+        memset(&(g_rcv[sck_idx].buf[0]), 0x00, g_rcv[sck_idx].size);
+        len = recv(g_rcv[sck_idx].sock, g_rcv[sck_idx].buf, g_rcv[sck_idx].size, 0);
         if (-1 == len) {
             printf("recv error\n");
             return TTR_NG;
         }
-        cb(g_rcv.buf, len);
+        cb(g_rcv[sck_idx].buf, len);
     }
 
-    close(g_rcv.sock);
+    close(g_rcv[sck_idx].sock);
     return TTR_OK;
 }

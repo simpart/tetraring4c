@@ -10,19 +10,20 @@
 void rcv_callback(uint8_t *, size_t);
 
 /*** define ***/
-#define IFACE_NAME "ens8"
+#define IFACE_NAME "eth0"
 
 /*** function ***/
 int main (void) {
-    int ret = 0;
+    int ret  = 0;
+    int sock = 0;
     uint8_t buf[256] = {0};
     
-    ret = ttr_nw_init(IFACE_NAME, buf, sizeof(buf));
-    if (TTR_NG == ret) {
+    sock = ttr_nw_init(IFACE_NAME, buf, sizeof(buf));
+    if (TTR_NG == sock) {
         return -1;
     }
     
-    ret = ttr_nw_rcvloop(rcv_callback);
+    ret = ttr_nw_rcvloop(sock, rcv_callback);
     if (TTR_NG == ret) {
         return -1;
     }
