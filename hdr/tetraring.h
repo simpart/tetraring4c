@@ -9,6 +9,7 @@
 #include "ttr/serial.h"
 #include "ttr/network.h"
 #include "ttr/error.h"
+#include "ttr/conf.h"
 
 #endif
 /* end of file */
