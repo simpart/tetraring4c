@@ -21,6 +21,7 @@ typedef struct ttr_conf {
 /*** prototype ***/
 ttr_conf_t * ttrcnf_load (char *);
 ttr_conf_t * ttrcnf_find (ttr_conf_t *, char *);
+int ttrcnf_remsp (char *, char *, size_t);
 int ttrcnf_free (ttr_conf_t *);
 
 #endif

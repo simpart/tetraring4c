@@ -12,13 +12,15 @@
 
 /*** function ***/
 ttr_conf_t * ttrcnf_load (char *pth) {
-    FILE *fp  = NULL;
-    char key[TTRCNF_KEYCNT]  = {0};
-    char val[TTRCNF_VALCNT]  = {0};
-    char line[TTRCNF_CNFCNT] = {0};
-    ttr_conf_t * ret_cnf     = NULL;
-    ttr_conf_t * set_cnf     = NULL;
+    FILE *fp        = NULL;
     void ** nxt_cnf = NULL;
+    char key[TTRCNF_KEYCNT]     = {0};
+    char val[TTRCNF_VALCNT]     = {0};
+    char key_tmp[TTRCNF_KEYCNT] = {0};
+    char val_tmp[TTRCNF_KEYCNT] = {0};
+    char line[TTRCNF_CNFCNT]    = {0};
+    ttr_conf_t * ret_cnf        = NULL;
+    ttr_conf_t * set_cnf        = NULL;
     
     /* check paramter */
     if (NULL == pth) {
@@ -29,16 +31,31 @@ ttr_conf_t * ttrcnf_load (char *pth) {
         return NULL;
     }
     /* init value */
-    memset(&key[0],  0x00, sizeof(key));
-    memset(&val[0],  0x00, sizeof(val));
+    memset(&key[0], 0x00, sizeof(key));
+    memset(&val[0], 0x00, sizeof(val));
+    memset(&key_tmp[0], 0x00, sizeof(key_tmp));
+    memset(&val_tmp[0], 0x00, sizeof(val_tmp));
     memset(&line[0], 0x00, sizeof(line));
     
     /* read config file */
     while (NULL != fgets(line, TTRCNF_CNFCNT-2, fp)) {
         sscanf(line, "%[^=]=%s", key, val);
-        if (('#' == key[0]) || (' ' == key[0]) || ('\n' == key[0]) || ('\r' == key[0])) {
+        if ( ('#' == key[0])  ||
+             (' ' == key[0])  ||
+             ('\n' == key[0]) ||
+             ('\r' == key[0]) ||
+             ('\0' == key[0]) ) {
             continue;
         }
+        
+        /* remove space */
+        if (TTR_NG == ttrcnf_remsp(&key_tmp[0], &key[0], TTRCNF_KEYCNT)) {
+            return NULL;
+        }
+        if (TTR_NG == ttrcnf_remsp(&val_tmp[0], &val[0], TTRCNF_VALCNT)) {
+            return NULL;
+        }
+        
         /* get conf memory */
         if (NULL == ret_cnf) {
             ret_cnf = (ttr_conf_t *) malloc(sizeof(ttr_conf_t));
@@ -55,14 +72,38 @@ ttr_conf_t * ttrcnf_load (char *pth) {
         memset(set_cnf, 0x00, sizeof(ttr_conf_t));
         
         /* set key,value */
-        memcpy(&(set_cnf->key[0]), &key[0], TTRCNF_KEYCNT);
-        memcpy(&(set_cnf->val[0]), &val[0], TTRCNF_VALCNT);
+        memcpy(&(set_cnf->key[0]), &key_tmp[0], TTRCNF_KEYCNT);
+        memcpy(&(set_cnf->val[0]), &val_tmp[0], TTRCNF_VALCNT);
         
         /* set chain */
         nxt_cnf = &(set_cnf->next);
     }
     
     return ret_cnf;
+}
+
+int ttrcnf_remsp (char *out, char *str, size_t siz) {
+    int loop    = 0;
+    int set_idx = 0;
+    
+    if ((NULL == str) || (NULL == out)) {
+        return TTR_NG;;
+    }
+    
+    memset(out, 0x00, siz);
+    
+    for (loop=0;loop < (int)siz;loop++) {
+        if ('\0' == str[loop]) {
+            break;
+        }
+        if (' ' == str[loop]) {
+            continue;
+        }
+        out[set_idx] = str[loop];
+        set_idx++;
+    }
+    
+    return TTR_OK;
 }
 
 
