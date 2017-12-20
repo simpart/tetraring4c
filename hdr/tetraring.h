@@ -10,6 +10,7 @@
 #include "ttr/network.h"
 #include "ttr/error.h"
 #include "ttr/conf.h"
+#include "ttr/chain.h"
 
 #endif
 /* end of file */
