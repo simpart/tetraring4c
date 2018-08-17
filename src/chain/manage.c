@@ -16,10 +16,16 @@ int g_ttrchn_idcnt     = 0;
 ttrchn_t *g_ttrchn_mng = NULL;
 
 /*** function ***/
+/**
+ * create management chain
+ *
+ * @return (TTR_OK) successful init
+ * @return (TTR_NG) failed init
+ */
 int ttrchn_init (void) {
     /* check init */
     if (TTR_TRUE == g_ttrchn_init) {
-        return TTR_OK;;
+        return TTR_OK;
     }
     /* init global */
     g_ttrchn_idcnt = 1;
@@ -35,32 +41,11 @@ int ttrchn_init (void) {
     return TTR_OK;
 }
 
-int ttrchn_create (void) {
-    int ret_id = 0;
-    ttrchn_t *head = NULL;
-    
-    /* init */
-    ttrchn_init();
-    
-    /* set return chain id */
-    ret_id = g_ttrchn_idcnt;
-    g_ttrchn_idcnt++;
-    
-    /* create chain head */
-    head = (ttrchn_t *) malloc(sizeof(ttrchn_t));
-    if (NULL == head) {
-        return TTR_NG;
-    }
-    memset(head, 0x00, sizeof(ttrchn_t));
-    
-    /* add to the management chian */
-    if (TTR_OK != ttrchn_add(DCNH_MNGID, head)) {
-        return TTR_NG;
-    }
-
-    return ret_id;
-}
-
+/**
+ * release chian
+ *
+ * @param[in] (int) chain id
+ */
 void ttrchn_free (int cid) {
     ttrchn_t *head = NULL;
     ttrchn_t *next = NULL;
@@ -84,6 +69,9 @@ void ttrchn_free (int cid) {
     free(head);
 }
 
+/**
+ * release all chain
+ */
 void ttrchn_close (void) {
     ttrchn_t *tmp  = g_ttrchn_mng;
     ttrchn_t *next = tmp->next;
@@ -104,6 +92,13 @@ void ttrchn_close (void) {
     return;
 }
 
+/**
+ * get head of management chain
+ *
+ * @param[in] (int) chain id
+ * @return (ttrchn_t *) chain pointer
+ * @return (NULL) failed get head
+ */
 ttrchn_t * ttrchn_gethead (int cid) {
     ttrchn_t *mng_chn  = g_ttrchn_mng;
     
@@ -123,4 +118,26 @@ ttrchn_t * ttrchn_gethead (int cid) {
     /* not hitted chain id */
     return NULL;
 }
+
+ttrchn_t * ttrchn_getlast (int cid) {
+    ttrchn_t *tgt = NULL;
+
+    if (TTRCHN_ID_MNG == cid) {
+        /* this cid is management chain */
+        tgt = g_ttrchn_mng;
+    } else {
+        tgt = ttrchn_gethead(cid);
+    }
+
+    if (NULL == tgt) {
+        return NULL;
+    }
+
+    while (NULL != tgt->next) {
+        tgt = (ttrchn_t *) tgt->next;
+    }
+
+    return tgt;
+}
+
 /* end of file */

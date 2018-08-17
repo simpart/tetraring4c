@@ -8,7 +8,7 @@
 #include "ttr/com.h"
 #include "ttr/serial.h"
 #include "ttr/network.h"
-#include "ttr/error.h"
+#include "ttr/debug.h"
 #include "ttr/conf.h"
 #include "ttr/chain.h"
 

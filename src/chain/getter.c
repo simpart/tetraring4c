@@ -15,7 +15,7 @@ extern ttrchn_t *g_ttrchn_mng;
 void ** ttrchn_first (int cid) {
 //    ttrchn_t *tgt = NULL;
     
-    if (DCNH_MNGID == cid) {
+    if (TTRCHN_ID_MNG == cid) {
         /* this cid is management chain */
     }
     
@@ -46,7 +46,7 @@ void ** ttrchn_find (int cid, void *elm, size_t siz) {
         return NULL;
     }
     
-    if (DCNH_MNGID == cid) {
+    if (TTRCHN_ID_MNG == cid) {
         /* this cid is management chain */
         
     }
@@ -59,7 +59,7 @@ void ** ttrchn_last (int cid) {
     ttrchn_t *tgt = NULL;
     
     /* check parameter */
-    if (DCNH_MNGID == cid) {
+    if (TTRCHN_ID_MNG == cid) {
         /* this cid is management chain */
         
     }
@@ -73,30 +73,15 @@ void ** ttrchn_last (int cid) {
     return &(tgt->conts);
 }
 
-/**
- * get pointer to the chain that next is NULL
- * 
- * @atteintion head chain is empty chain. it's *conts is always NULL.
- */
-ttrchn_t * ttrchn_lastchn (int cid) {
-    ttrchn_t *tgt = NULL;
-    
-    if (DCNH_MNGID == cid) {
-        /* this cid is management chain */
-        tgt = g_ttrchn_mng;
-    } else {
-        tgt = ttrchn_gethead(cid);
-    }
-    
-    if (NULL == tgt) {
-        return NULL;
-    }
-    
-    while (NULL != tgt->next) {
-        tgt = (ttrchn_t *) tgt->next;
-    }
-    
-    return tgt;
-}
 
+int ttrchn_len (int cid) {
+    ttrchn_t *last = NULL;
+    
+    last = ttrchn_getlast(cid);
+    if (NULL == last) {
+        return TTR_NG;
+    }
+    
+    return last->idx;
+}
 /* end of file */

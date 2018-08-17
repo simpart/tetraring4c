@@ -12,8 +12,47 @@
 
 /*** global ***/
 extern ttrchn_t *g_ttrchn_mng;
+extern int g_ttrchn_idcnt;
 
 /*** function ***/
+/**
+ * create new chain
+ *
+ * @return (int) chain id
+ * @return (int) TTR_NG : failed create chain
+ */
+int ttrchn_create (void) {
+    int ret_id     = 0;
+    ttrchn_t *head = NULL;
+    
+    /* init */
+    ttrchn_init();
+    
+    /* set return chain id */
+    ret_id = g_ttrchn_idcnt;
+    g_ttrchn_idcnt++;
+    
+    /* create chain head */
+    head = (ttrchn_t *) malloc(sizeof(ttrchn_t));
+    if (NULL == head) {
+        return TTR_NG;
+    }
+    memset(head, 0x00, sizeof(ttrchn_t));
+    
+    /* add to the management chian */
+    if (TTR_OK != ttrchn_add(TTRCHN_ID_MNG, head)) {
+        return TTR_NG;
+    }
+    
+    return ret_id;
+}
+
+/**
+ * add element to target chain
+ *
+ * @param[in] (int) chain id
+ * @param[in] (void *) add chain element
+ */
 int ttrchn_add (int cid, void *elm) {
     ttrchn_t *add_chn  = NULL;
     ttrchn_t *last = NULL;
@@ -25,11 +64,11 @@ int ttrchn_add (int cid, void *elm) {
     
     /* get management last chain when cid is manamegent id */
     /* get main last chain when cid chain id               */
-    last = ttrchn_lastchn(cid);
+    last = ttrchn_getlast(cid);
     if (NULL == last) {
         return TTR_NG;
     }
-
+    
     /* create additional chain */
     add_chn = (ttrchn_t *) malloc(sizeof(ttrchn_t));
     if (NULL == add_chn) {
@@ -46,6 +85,12 @@ int ttrchn_add (int cid, void *elm) {
     return TTR_OK;
 }
 
+/**
+ * remove target index chain element
+ *
+ * @param[in] (int) target chain id
+ * @param[in] (int) target element id
+ */
 int ttrchn_remove (int cid, int idx) {
     int      idx_cnt  = 0;
     void     *val     = NULL;
@@ -96,7 +141,6 @@ int ttrchn_remove (int cid, int idx) {
         /* this chain is no element */
         return TTR_OK;
     }
-    
     while (NULL != tmp) {
         tmp->idx = idx_cnt;
         tmp = (ttrchn_t *) tmp->next;
