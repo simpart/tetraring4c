@@ -9,6 +9,8 @@
 #include <string.h>
 #include "ttr/com.h"
 #include "ttr/chain.h"
+#include "ttr/memory.h"
+#include "ttr/check.h"
 
 /*** global ***/
 int g_ttrchn_init      = TTR_FALSE;
@@ -30,11 +32,8 @@ int ttrchn_init (void) {
     /* init global */
     g_ttrchn_idcnt = 1;
     
-    g_ttrchn_mng = (ttrchn_t *) malloc(sizeof(ttrchn_t));
-    if (NULL == g_ttrchn_mng) {
-        return TTR_NG;;
-    }
-    memset(g_ttrchn_mng, 0x00, sizeof(ttrchn_t));
+    g_ttrchn_mng = (ttrchn_t *) ttrmem_malloc(sizeof(ttrchn_t));
+    TTRCHK_NULLVAL(g_ttrchn_mng, "failed malloc");
     
     g_ttrchn_init = TTR_TRUE;
     
@@ -63,10 +62,9 @@ void ttrchn_free (int cid) {
         }
         tmp  = next;
         next = (ttrchn_t *) next->next;
-        free(tmp);
+        TTRMEM_FREE(tmp);
     }
-    
-    free(head);
+    TTRMEM_FREE(head);
 }
 
 /**
@@ -84,10 +82,11 @@ void ttrchn_close (void) {
     while (NULL != next) {
         next = (ttrchn_t *) tmp->next;
         ttrchn_free(tmp->idx);
-        free(tmp);
+        
+        TTRMEM_FREE(tmp);
         tmp = next;
     }
-    free(g_ttrchn_mng);
+    TTRMEM_FREE(g_ttrchn_mng);
     
     return;
 }

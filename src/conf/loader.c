@@ -9,6 +9,8 @@
 #include <string.h>
 #include "ttr/com.h"
 #include "ttr/conf.h"
+#include "ttr/check.h"
+#include "ttr/memory.h"
 
 /*** function ***/
 ttr_conf_t * ttrcnf_load (char *pth) {
@@ -31,11 +33,8 @@ ttr_conf_t * ttrcnf_load (char *pth) {
         return NULL;
     }
     /* init value */
-    memset(&key[0], 0x00, sizeof(key));
-    memset(&val[0], 0x00, sizeof(val));
-    memset(&key_tmp[0], 0x00, sizeof(key_tmp));
-    memset(&val_tmp[0], 0x00, sizeof(val_tmp));
-    memset(&line[0], 0x00, sizeof(line));
+    TTR_STRINIT3(key, val, key_tmp);
+    TTR_STRINIT2(val_tmp, line);
     
     /* read config file */
     while (NULL != fgets(line, TTRCNF_CNFCNT-2, fp)) {
@@ -83,16 +82,13 @@ ttr_conf_t * ttrcnf_load (char *pth) {
 }
 
 int ttrcnf_remsp (char *out, char *str, size_t siz) {
-    int loop    = 0;
     int set_idx = 0;
     
-    if ((NULL == str) || (NULL == out)) {
-        return TTR_NG;;
-    }
+    TTRCHK_NULLPRM2(str, out);
     
     memset(out, 0x00, siz);
     
-    for (loop=0;loop < (int)siz;loop++) {
+    TTR_LOOP(loop, (int)siz) {
         if ('\0' == str[loop]) {
             break;
         }
@@ -135,7 +131,7 @@ int ttrcnf_free (ttr_conf_t *cnf) {
     }
     do {
         next = tmp->next;
-        free(tmp);
+        TTRMEM_FREE(tmp);
         tmp = (ttr_conf_t *) next;
     } while (NULL != next);
     

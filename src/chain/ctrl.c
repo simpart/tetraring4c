@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ttr/com.h"
+#include "ttr/memory.h"
+#include "ttr/check.h"
 #include "ttr/chain.h"
 
 /*** global ***/
@@ -33,11 +35,8 @@ int ttrchn_create (void) {
     g_ttrchn_idcnt++;
     
     /* create chain head */
-    head = (ttrchn_t *) malloc(sizeof(ttrchn_t));
-    if (NULL == head) {
-        return TTR_NG;
-    }
-    memset(head, 0x00, sizeof(ttrchn_t));
+    head = ttrmem_malloc(sizeof(ttrchn_t));
+    TTRCHK_NULLVAL(head, "failed malloc")
     
     /* add to the management chian */
     if (TTR_OK != ttrchn_add(TTRCHN_ID_MNG, head)) {
@@ -54,27 +53,20 @@ int ttrchn_create (void) {
  * @param[in] (void *) add chain element
  */
 int ttrchn_add (int cid, void *elm) {
-    ttrchn_t *add_chn  = NULL;
-    ttrchn_t *last = NULL;
+    ttrchn_t *add_chn = NULL;
+    ttrchn_t *last    = NULL;
     
-    /* check parameter */
-    if (NULL == elm) {
-        return TTR_NG;
-    }
+    TTRCHK_NULLPRM(elm);
     
     /* get management last chain when cid is manamegent id */
     /* get main last chain when cid chain id               */
     last = ttrchn_getlast(cid);
-    if (NULL == last) {
-        return TTR_NG;
-    }
+    TTRCHK_NULLVAL(last, "could not get last element");
     
     /* create additional chain */
-    add_chn = (ttrchn_t *) malloc(sizeof(ttrchn_t));
-    if (NULL == add_chn) {
-        return TTR_NG;
-    }
-    memset(add_chn, 0x00, sizeof(ttrchn_t));
+    add_chn = (ttrchn_t *) ttrmem_malloc(sizeof(ttrchn_t));
+    TTRCHK_NULLVAL(add_chn, "failed malloc");
+    /* set data */
     add_chn->idx   = (last->idx) + 1;
     add_chn->conts = elm;
     
@@ -99,48 +91,42 @@ int ttrchn_remove (int cid, int idx) {
     
     /* release contents */
     val = ttrchn_get(cid, idx);
-    if (NULL == val) {
-        return TTR_NG;
-    }
-    free(val);
+    TTRCHK_NULLVAL(val, "failed get chain contents");
+    TTRMEM_FREE(val);
     
     /* get taregt chain */
     tmp = ttrchn_gethead(cid);
-    if (NULL == tmp) {
-        return TTR_NG;
-    }
+    TTRCHK_NULLVAL(tmp, "failed get head element");
+    
     while (NULL != tmp) {
         if (tmp->idx == (idx+1)) {
             if (NULL != tmp->next) {
                 /* replace chain */
-                rep_chn = (ttrchn_t *) tmp->prev;
+                rep_chn       = (ttrchn_t *) tmp->prev;
                 rep_chn->next = tmp->next;
-                rep_chn = tmp->next;
+                rep_chn       = tmp->next;
                 rep_chn->prev = tmp->prev;
             } else {
                 /* this chain is last */
-                rep_chn = (ttrchn_t *) tmp->prev;
+                rep_chn       = (ttrchn_t *) tmp->prev;
                 rep_chn->next = NULL;
             }
             break;
         }
         tmp = (ttrchn_t *) tmp->next;
     }
+    
     /* release target chain */
-    if (NULL == tmp) {
-        return TTR_NG;
-    }
-    free(tmp);
+    TTRCHK_NULLVAL(tmp, "release target chain is already null");
+    TTRMEM_FREE(tmp);
     
     /* re-index chain */
     tmp = ttrchn_gethead(cid);
-    if (NULL == tmp) {
-        return TTR_NG;
-    }
-    if (NULL == tmp->next) {
-        /* this chain is no element */
-        return TTR_OK;
-    }
+    TTRCHK_NULLVAL(tmp, "failed get head element");
+    
+    /* check exists element */
+    TTRCHK_NULLVAL(tmp->next, "failed");
+    
     while (NULL != tmp) {
         tmp->idx = idx_cnt;
         tmp = (ttrchn_t *) tmp->next;

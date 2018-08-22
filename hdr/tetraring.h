@@ -11,6 +11,7 @@
 #include "ttr/debug.h"
 #include "ttr/conf.h"
 #include "ttr/chain.h"
+#include "ttr/string.h"
 
 #endif
 /* end of file */

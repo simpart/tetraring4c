@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include "ttr/com.h"
 #include "ttr/chain.h"
+#include "ttr/check.h"
 
 /*** global ***/
 extern ttrchn_t *g_ttrchn_mng;
 
 /*** function ***/
 void ** ttrchn_first (int cid) {
-//    ttrchn_t *tgt = NULL;
     
     if (TTRCHN_ID_MNG == cid) {
         /* this cid is management chain */
@@ -29,6 +29,7 @@ void * ttrchn_get (int cid, int idx) {
     if (NULL == tgt) {
         return NULL;
     }
+    
     while (NULL != tgt) {
         if (tgt->idx == (idx+1)) {
             return tgt->conts;
@@ -78,9 +79,7 @@ int ttrchn_len (int cid) {
     ttrchn_t *last = NULL;
     
     last = ttrchn_getlast(cid);
-    if (NULL == last) {
-        return TTR_NG;
-    }
+    TTRCHK_NULLVAL(last, "failed get last element");
     
     return last->idx;
 }

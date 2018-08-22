@@ -2,8 +2,8 @@
  * @file debug.h
  * @author simpart
  */
-#ifndef __TTR_ERROR_H__
-#define __TTR_ERROR_H__
+#ifndef __TTR_DEBUG_H__
+#define __TTR_DEBUG_H__
 
 /*** include ***/
 #include <time.h>

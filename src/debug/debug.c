@@ -10,6 +10,8 @@
 #include "ttr/com.h"
 #include "ttr/chain.h"
 #include "ttr/debug.h"
+#include "ttr/memory.h"
+#include "ttr/check.h"
 
 /*** global ***/
 int g_ttrdbg_chain = TTRCHN_ID_INIT;
@@ -46,11 +48,11 @@ void ttrdbg_set (int line, const char *file, int lv, const char *str) {
     }
     
     /* create contents */
-    conts = (ttrdbg_conts_t *) malloc(sizeof(ttrdbg_conts_t));
+    conts = (ttrdbg_conts_t *) ttrmem_malloc(sizeof(ttrdbg_conts_t));
     if (NULL == conts) {
         return;
     }
-    memset(conts, 0x00, sizeof(ttrdbg_conts_t));
+    
     /* set level */
     conts->lv = lv;
     /* set string */
