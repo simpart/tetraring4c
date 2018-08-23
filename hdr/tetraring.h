@@ -12,6 +12,8 @@
 #include "ttr/conf.h"
 #include "ttr/chain.h"
 #include "ttr/string.h"
+#include "ttr/check.h"
+#include "ttr/memory.h"
 
 #endif
 /* end of file */

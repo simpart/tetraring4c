@@ -18,5 +18,13 @@
 /*** prototype ***/
 int ttrstr_split (const char *, char, unsigned int, char *);
 
+/*** macro ***/
+#define TTRSTR_ATOI(num, str)              \
+    num = atoi(str);                       \
+    if ( (0 == num) && ('0' != str[0]) ) { \
+        TTRDBG_ERR("failed atoi");         \
+        return TTR_NG;                     \
+    }
+
 #endif
 /* end of file */

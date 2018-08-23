@@ -19,7 +19,12 @@ typedef unsigned short ushort;
 typedef unsigned long  ulong;
 
 /*** macro ***/
-#define TTR_LOOP(i,c) int i=0; for (;i < c;i++) 
+#define TTR_LOOP(i, c) int i=0; for (;i < c;i++)
+#define TTR_LOOP_i(c) TTR_LOOP(i, c)
+#define TTR_LOOP_j(c) TTR_LOOP(j, c)
+#define TTR_LOOP_k(c) TTR_LOOP(k, c)
+
+
 #define TTR_INIT(i) memset(&i, 0x00, sizeof(i))
 #define TTR_INIT2(i1, i2) TTR_INIT(i1); TTR_INIT(i2)
 #define TTR_INIT3(i1, i2, i3) TTR_INIT(i1); TTR_INIT(i2); TTR_INIT(i3)

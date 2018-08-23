@@ -88,14 +88,14 @@ int ttrcnf_remsp (char *out, char *str, size_t siz) {
     
     memset(out, 0x00, siz);
     
-    TTR_LOOP(loop, (int)siz) {
-        if ('\0' == str[loop]) {
+    TTR_LOOP_i((int)siz) {
+        if ('\0' == str[i]) {
             break;
         }
-        if (' ' == str[loop]) {
+        if (' ' == str[i]) {
             continue;
         }
-        out[set_idx] = str[loop];
+        out[set_idx] = str[i];
         set_idx++;
     }
     
