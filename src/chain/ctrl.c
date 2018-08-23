@@ -36,7 +36,7 @@ int ttrchn_create (void) {
     
     /* create chain head */
     head = ttrmem_malloc(sizeof(ttrchn_t));
-    TTRCHK_NULLVAL(head, "failed malloc")
+    __ttrchk_nullval(head, "failed malloc")
     
     /* add to the management chian */
     if (TTR_OK != ttrchn_add(TTRCHN_ID_MNG, head)) {
@@ -56,16 +56,16 @@ int ttrchn_add (int cid, void *elm) {
     ttrchn_t *add_chn = NULL;
     ttrchn_t *last    = NULL;
     
-    TTRCHK_NULLPRM(elm);
+    __ttrchk_nullprm(elm);
     
     /* get management last chain when cid is manamegent id */
     /* get main last chain when cid chain id               */
     last = ttrchn_getlast(cid);
-    TTRCHK_NULLVAL(last, "could not get last element");
+    __ttrchk_nullval(last, "could not get last element");
     
     /* create additional chain */
     add_chn = (ttrchn_t *) ttrmem_malloc(sizeof(ttrchn_t));
-    TTRCHK_NULLVAL(add_chn, "failed malloc");
+    __ttrchk_nullval(add_chn, "failed malloc");
     /* set data */
     add_chn->idx   = (last->idx) + 1;
     add_chn->conts = elm;
@@ -91,12 +91,12 @@ int ttrchn_remove (int cid, int idx) {
     
     /* release contents */
     val = ttrchn_get(cid, idx);
-    TTRCHK_NULLVAL(val, "failed get chain contents");
-    TTRMEM_FREE(val);
+    __ttrchk_nullval(val, "failed get chain contents");
+    __ttrmem_free(val);
     
     /* get taregt chain */
     tmp = ttrchn_gethead(cid);
-    TTRCHK_NULLVAL(tmp, "failed get head element");
+    __trchk_nullval(tmp, "failed get head element");
     
     while (NULL != tmp) {
         if (tmp->idx == (idx+1)) {
@@ -117,15 +117,15 @@ int ttrchn_remove (int cid, int idx) {
     }
     
     /* release target chain */
-    TTRCHK_NULLVAL(tmp, "release target chain is already null");
-    TTRMEM_FREE(tmp);
+    __ttrchk_nullval(tmp, "release target chain is already null");
+    __ttrmem_free(tmp);
     
     /* re-index chain */
     tmp = ttrchn_gethead(cid);
-    TTRCHK_NULLVAL(tmp, "failed get head element");
+    __ttrchk_nullval(tmp, "failed get head element");
     
     /* check exists element */
-    TTRCHK_NULLVAL(tmp->next, "failed");
+    __ttrchk_nullval(tmp->next, "failed");
     
     while (NULL != tmp) {
         tmp->idx = idx_cnt;

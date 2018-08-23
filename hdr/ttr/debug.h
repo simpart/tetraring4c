@@ -35,14 +35,14 @@ void       ttrdbg_print   (void);
 void       ttrdbg_free    (void);
 
 /*** macro ***/
-#define TTRDBG_EMER(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_EMER, s)
-#define TTRDBG_ALRT(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_ALRT, s)
-#define TTRDBG_CRIT(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_CRIT, s)
-#define TTRDBG_ERR(s)  ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_ERR , s)
-#define TTRDBG_WARN(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_WARN, s)
-#define TTRDBG_NOTI(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_NOTI, s)
-#define TTRDBG_INFO(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_INFO, s)
-#define TTRDBG_DEBG(s) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_DEBG, s)
+#define __ttrdbg_emer(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_EMER, msg)
+#define __ttrdbg_alrt(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_ALRT, msg)
+#define __ttrdbg_crit(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_CRIT, msg)
+#define __ttrdbg_err(msg)  ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_ERR , msg)
+#define __ttrdbg_warn(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_WARN, msg)
+#define __ttrdbg_noti(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_NOTI, msg)
+#define __ttrdbg_info(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_INFO, msg)
+#define __ttrdbg_debg(msg) ttrdbg_set (__LINE__, __FILE__, TTRDBG_LV_DEBG, msg)
 
 #endif
 /* end of file */

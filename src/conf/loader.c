@@ -84,11 +84,11 @@ ttr_conf_t * ttrcnf_load (char *pth) {
 int ttrcnf_remsp (char *out, char *str, size_t siz) {
     int set_idx = 0;
     
-    TTRCHK_NULLPRM2(str, out);
+    __ttrchk_nullprm2(str, out);
     
     memset(out, 0x00, siz);
     
-    TTR_LOOP_i((int)siz) {
+    __ttr_loop_i( (int)siz ) {
         if ('\0' == str[i]) {
             break;
         }
@@ -131,7 +131,7 @@ int ttrcnf_free (ttr_conf_t *cnf) {
     }
     do {
         next = tmp->next;
-        TTRMEM_FREE(tmp);
+        __ttrmem_free(tmp);
         tmp = (ttr_conf_t *) next;
     } while (NULL != next);
     

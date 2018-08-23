@@ -79,7 +79,7 @@ int ttrchn_len (int cid) {
     ttrchn_t *last = NULL;
     
     last = ttrchn_getlast(cid);
-    TTRCHK_NULLVAL(last, "failed get last element");
+    __ttrchk_nullval(last, "failed get last element");
     
     return last->idx;
 }

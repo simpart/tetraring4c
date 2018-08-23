@@ -31,10 +31,10 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     int ret  = 0;
     int sock = 0;
     
-    TTRCHK_NULLPRM2(ifnm, buf);
+    __ttrchk_nullprm2(ifnm, buf);
     
     /* initialize value */
-    TTR_INIT3(iface, sa, rcv_cmp);
+    __ttr_initval3(iface, sa, rcv_cmp);
     
     /* set ifname */
     if (strlen( ifnm ) >= sizeof(iface.ifr_name)) {
@@ -44,17 +44,17 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     strncpy(iface.ifr_name, ifnm, sizeof(iface.ifr_name));
     
     sock = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
-    TTRCHK_ISLESS(sock, 0, "failed get socket");
+    __ttrchk_less(sock, 0, "failed get socket");
     
     ret = ioctl(sock, SIOCGIFINDEX, &iface);
-    TTRCHK_ISLESS_GOTO(ret, 0, "failed ioctl", CLOSE_SOCK);
+    __ttrchk_less_goto(ret, 0, "failed ioctl", CLOSE_SOCK);
     
-    memset(&sa, 0x00, sizeof(sa));
+    /* set value */
     sa.sll_family  = AF_PACKET;
     sa.sll_ifindex = iface.ifr_ifindex;
     
     /* set promiscuous mode */
-    memset(&mreq, 0x00, sizeof(mreq));
+    __ttr_initval(mreq);
     mreq.mr_type    = PACKET_MR_PROMISC;
     mreq.mr_ifindex = iface.ifr_ifindex;
 
@@ -65,25 +65,27 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
               (void *)&mreq,
               sizeof(mreq)
           );
-    TTRCHK_ISLESS_GOTO(ret, 0, "failed setsockopt", CLOSE_SOCK);
+    __ttrchk_less_goto(ret, 0, "failed setsockopt", CLOSE_SOCK);
     
     ret = bind(
               sock,
               (const struct sockaddr *)&sa,
               sizeof(sa)
           );
-    TTRCHK_ISLESS_GOTO(ret, 0, "failed bind", CLOSE_SOCK);
+    __ttrchk_less_goto(ret, 0, "failed bind", CLOSE_SOCK);
     
-    TTR_LOOP(idx, TTR_NW_IFNCT) {
-        if (0 == memcmp(&g_rcv[idx], &rcv_cmp, sizeof(ttr_nw_rcvinf_t))) {
-            g_rcv[idx].sock = sock;
-            g_rcv[idx].buf  = buf;
-            g_rcv[idx].size = size;
+    __ttr_loop_i(TTR_NW_IFNCT) {
+        
+        if (0 == memcmp(&g_rcv[i], &rcv_cmp, sizeof(ttr_nw_rcvinf_t))) {
+            g_rcv[i].sock = sock;
+            g_rcv[i].buf  = buf;
+            g_rcv[i].size = size;
             break;
         }
+        
     }
     
-    TTRCHK_ISEQUAL_GOTO(idx, TTR_NW_IFNCT, "could not find receive info", CLOSE_SOCK);
+    __ttrchk_equal_goto(i, TTR_NW_IFNCT, "could not find receive info", CLOSE_SOCK);
     
 CLOSE_SOCK:
     close(sock);
@@ -104,24 +106,24 @@ int ttr_nw_rcvloop (int sck, void (*cb)(uint8_t *, size_t)) {
     int len     = 0;
     int sck_idx = TTR_NG;
     
-    TTRCHK_NULLPRM(cb);
+    __ttrchk_nullprm(cb);
     
     /* get socket index */
-    TTR_LOOP(loop, TTR_NW_IFNCT) {
-        if (g_rcv[loop].sock == sck) {
-            sck_idx = loop;
+    __ttr_loop_i(TTR_NW_IFNCT) {
+        if (g_rcv[i].sock == sck) {
+            sck_idx = i;
             break;
         }
     }
     
-    TTRCHK_ISEQUAL(sck_idx, TTR_NG, "could not find socket index");
+    __ttrchk_equal(sck_idx, TTR_NG, "could not find socket index");
     
     
     while(TTR_TRUE) {
         memset(&(g_rcv[sck_idx].buf[0]), 0x00, g_rcv[sck_idx].size);
         len = recv(g_rcv[sck_idx].sock, g_rcv[sck_idx].buf, g_rcv[sck_idx].size, 0);
         
-        TTRCHK_ISEQUAL(len, -1, "receive error");
+        __ttrchk_equal(len, -1, "receive error");
         
         /* execute callback */
         cb(g_rcv[sck_idx].buf, len);
@@ -149,18 +151,17 @@ void * ttr_nw_thdwrp (void *prm) {
 int ttr_nw_rcvloop_thd (int sck, void (*cb)(uint8_t *, size_t), pthread_t * thd) {
     int sck_idx = TTR_NG;
     
-    if (NULL == thd) {
-        return TTR_NG;
-    }
-    
+    __ttrchk_nullprm2(cb, thd)
+
     /* get socket index */
-    TTR_LOOP(loop, TTR_NW_IFNCT) {
-        if (g_rcv[loop].sock == sck) {
-            sck_idx = loop;
+    __ttr_loop_i(TTR_NW_IFNCT) {
+        if (g_rcv[i].sock == sck) {
+            sck_idx = i;
             break;
         }
     }
-    TTRCHK_ISEQUAL(sck_idx, TTR_NG, "could not find socket index");
+    
+    __ttrchk_equal(sck_idx, TTR_NG, "could not find socket index");
     
     g_rcv[sck_idx].callback = cb; 
     

@@ -33,7 +33,7 @@ int ttrchn_init (void) {
     g_ttrchn_idcnt = 1;
     
     g_ttrchn_mng = (ttrchn_t *) ttrmem_malloc(sizeof(ttrchn_t));
-    TTRCHK_NULLVAL(g_ttrchn_mng, "failed malloc");
+    __ttrchk_nullval(g_ttrchn_mng, "failed malloc");
     
     g_ttrchn_init = TTR_TRUE;
     
@@ -62,9 +62,9 @@ void ttrchn_free (int cid) {
         }
         tmp  = next;
         next = (ttrchn_t *) next->next;
-        TTRMEM_FREE(tmp);
+        __ttrmem_free(tmp);
     }
-    TTRMEM_FREE(head);
+    __ttrmem_free(head);
 }
 
 /**
@@ -83,10 +83,10 @@ void ttrchn_close (void) {
         next = (ttrchn_t *) tmp->next;
         ttrchn_free(tmp->idx);
         
-        TTRMEM_FREE(tmp);
+        __ttrmem_free(tmp);
         tmp = next;
     }
-    TTRMEM_FREE(g_ttrchn_mng);
+    __ttrmem_free(g_ttrchn_mng);
     
     return;
 }

@@ -18,19 +18,19 @@ void * ttrmem_malloc(size_t);
 void   ttrmem_free(void **);
 
 /*** macro ***/
-#define TTRMEM_STRINIT(s)  memset(s, 0x00, sizeof(s))
-#define TTRMEM_NINIT(t, n) memset(t, 0x00, n)
-#define TTRMEM_INIT(t)     TTRMEM_NINIT(t, sizeof(t))
+#define __ttrmem_strinit(s)  memset(s, 0x00, sizeof(s))
+#define __ttrmem_ninit(t, n) memset(t, 0x00, n)
+#define __ttrmem_init(t)     __ttrmem_ninit(t, sizeof(t))
 
-#define TTRMEM_MALLOC(t, v, s)          \
+#define __ttrmem_malloc(t, v, s)        \
     t v = (t) ttrmem_malloc(s);         \
-    TTRCHK_NULLVAL(v, "failed malloc")
+    __ttrchk_nullval(v, "failed malloc")
 
-#define TTRMEM_STRMLOC(nm, src) \
-    TTRCHK_STRLEN(strnlen(src), 32) \
-    TTRMEM_MALLOC(char *, nm, strnlen(src, 32)+1 )
+#define __ttrmem_strmloc(nm, src)     \
+    __ttrchk_strlen(strnlen(src), 32) \
+    __ttrmem_malloc(char *, nm, strnlen(src, 32)+1 )
     
-#define TTRMEM_FREE(f) ttrmem_free((void **) &f)
+#define __ttrmem_free(f) ttrmem_free((void **) &f)
 
 #endif
 /* end of file */
