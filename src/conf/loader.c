@@ -33,8 +33,8 @@ ttr_conf_t * ttrcnf_load (char *pth) {
         return NULL;
     }
     /* init value */
-    TTR_STRINIT3(key, val, key_tmp);
-    TTR_STRINIT2(val_tmp, line);
+    __ttr_strinit3(key, val, key_tmp);
+    __ttr_strinit2(val_tmp, line);
     
     /* read config file */
     while (NULL != fgets(line, TTRCNF_CNFCNT-2, fp)) {

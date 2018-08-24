@@ -42,13 +42,13 @@
         return TTR_NG;                     \
     }
 
-#define __ttrchk_strlen(l, m)                  \
-    if ((0 == l) || (m == l)) {                \
+#define __ttrchk_strlen(len, max)              \
+    if ((0 == len) || (max == len)) {          \
         __ttrdbg_err("invalid string length"); \
         return TTR_NG;                         \
     }
 
-#define __ttrchk_strnlen(str, len) ttrchk_strlen(strnlen(str,len),len)
+#define __ttrchk_strnlen(str, len) __ttrchk_strlen(strnlen(str,len),len)
 
 #define __ttrchk_less(v, l, msg) \
     if (l > v) {                 \

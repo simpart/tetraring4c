@@ -96,7 +96,7 @@ int ttrchn_remove (int cid, int idx) {
     
     /* get taregt chain */
     tmp = ttrchn_gethead(cid);
-    __trchk_nullval(tmp, "failed get head element");
+    __ttrchk_nullval(tmp, "failed get head element");
     
     while (NULL != tmp) {
         if (tmp->idx == (idx+1)) {

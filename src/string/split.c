@@ -54,7 +54,7 @@ int ttrstr_split (const char *str, char sp, uint idx, char *out) {
         return TTR_OK;
     } else {
         *out = '\0';
-        __ttrchk_free(ret_buf);
+        __ttrmem_free(ret_buf);
         return (0 == sp_cnt) ? TTRSTR_RET_NOSPCHR : TTRSTR_RET_MAXIDX;
     }
 }
