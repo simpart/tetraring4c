@@ -3,6 +3,9 @@
  * @brief  chain function header
  * @author simpart
  */
+/*** include ***/
+#include "ttr/check.h"
+
 #ifndef __TTR_CHAIN_H__
 #define __TTR_CHAIN_H__
 
@@ -32,11 +35,17 @@ int ttrchn_add    (int, void *);
 int ttrchn_remove (int, int);
 
 /* getter */
-void *     ttrchn_get     (int, int);
-void **    ttrchn_find    (int, void *, size_t);
-void **    ttrchn_head    (void);
-void **    ttrchn_last    (int);
-int        ttrchn_len     (int);
+void *  ttrchn_get  (int, int);
+void ** ttrchn_find (int, void *, size_t);
+void ** ttrchn_head (void);
+void ** ttrchn_last (int);
+int     ttrchn_len  (int);
 
+/*** macro ***/
+#define __ttrchn_loop_chain(id)                            \
+    ttrchn_t *chain = ttrchn_gethead(id);                  \
+    __ttrchk_nullval(chain, "chain head is null");         \
+    for (;NULL != chain; chain = (ttrchn_t *) chain->next) \
+    
 #endif
 /* end of file */

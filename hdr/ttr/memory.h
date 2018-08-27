@@ -31,6 +31,8 @@ void   ttrmem_free(void **);
     __ttrmem_malloc(char *, nm, strnlen(src, 32)+1 )
     
 #define __ttrmem_free(f) ttrmem_free((void **) &f)
+#define __ttrmem_free2(f1, f2) __ttrmem_free(f1); __ttrmem_free(f2)
+#define __ttrmem_free3(f1, f2, f3) __ttrmem_free(f1); __ttrmem_free(f2); __ttrmem_free(f3)
 
 #endif
 /* end of file */

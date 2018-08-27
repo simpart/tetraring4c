@@ -101,6 +101,6 @@ void ttrdbg_lvprint (int lv) {
 }
 
 void ttrdbg_free () {
-    ttrchn_free (g_ttrdbg_chain);
+    ttrchn_free(g_ttrdbg_chain);
 }
 /* end of file */

@@ -10,6 +10,7 @@
 
 /*** define ***/
 #define TTRSTR_SPMAX_LEN 256
+#define TTRSTR_KEYLEN 64
 
 #define TTRSTR_RET_NOSPCHR 100
 #define TTRSTR_RET_MAXIDX  101
@@ -25,6 +26,8 @@ int ttrstr_split (const char *, char, unsigned int, char *);
         __ttrdbg_err("failed atoi");       \
         return TTR_NG;                     \
     }
+
+#define __ttrstr_iskey(key, chk) if (0 == strncmp(key, chk, TTRSTR_KEYLEN))
 
 #endif
 /* end of file */

@@ -24,6 +24,12 @@
         return TTR_NG;           \
     }
 
+#define __ttrchk_nullval_goto(val, msg, lbl) \
+    if (NULL == val) {                       \
+        __ttrdbg_err(msg);                   \
+        goto lbl;                            \
+    }
+
 #define __ttrchk_nullprm(p)               \
     if (NULL == p) {                      \
        __ttrdbg_err("invalid parameter"); \
@@ -34,6 +40,12 @@
     if ((NULL == p1) || (NULL == p2)) {    \
         __ttrdbg_err("invalid parameter"); \
         return TTR_NG;                     \
+    }
+
+#define __ttrchk_nullprm3(p1, p2, p3)                    \
+    if ((NULL == p1) || (NULL == p2) || (NULL == p3)) {  \
+        __ttrdbg_err("invalid parameter");               \
+        return TTR_NG;                                   \
     }
 
 #define __ttrchk_signprm(p)                \
