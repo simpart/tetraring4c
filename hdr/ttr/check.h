@@ -62,6 +62,18 @@
 
 #define __ttrchk_strnlen(str, len) __ttrchk_strlen(strnlen(str,len),len)
 
+#define __ttrchk_over(val, over, msg) \
+    if (over < val) {                 \
+        __ttrdbg_err(msg);            \
+        return TTR_NG;                \
+    }
+
+#define __ttrchk_over_goto(val, over, msg, lbl) \
+    if (over < val) {                           \
+        __ttrdbg_err(msg);                      \
+        goto lbl;                               \
+    }
+
 #define __ttrchk_less(v, l, msg) \
     if (l > v) {                 \
         __ttrdbg_err(msg);       \

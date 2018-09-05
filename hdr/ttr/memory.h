@@ -15,6 +15,7 @@
 
 /*** prototype ***/
 void * ttrmem_malloc(size_t);
+char * ttrmem_strmloc(char *, size_t);
 void   ttrmem_free(void **);
 
 /*** macro ***/
@@ -25,9 +26,6 @@ void   ttrmem_free(void **);
     t v = (t) ttrmem_malloc(s);         \
     __ttrchk_nullval(v, "failed malloc")
 
-#define __ttrmem_strmloc(nm, src)     \
-    __ttrchk_strlen(strnlen(src), 32) \
-    __ttrmem_malloc(char *, nm, strnlen(src, 32)+1 )
     
 #define __ttrmem_free(f) ttrmem_free((void **) &f)
 #define __ttrmem_free2(f1, f2) __ttrmem_free(f1); __ttrmem_free(f2)

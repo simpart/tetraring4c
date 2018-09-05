@@ -33,5 +33,11 @@ int ttrstr_filquot (const char *, char *, size_t);
 #define __ttrstr_iskey(key, chk) if (0 == strncmp(key, chk, TTRSTR_KEYLEN))
 #define __ttrstr_init(s)  memset(s, 0x00, sizeof(s))
 
+#define __ttrstr_len(len, str, max)     \
+    len = strnlen(str, max);            \
+    __ttrchk_over(len, max-1, "over max string length")
+
+
+
 #endif
 /* end of file */
