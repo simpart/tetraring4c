@@ -3,6 +3,8 @@
  * @brief defined string function
  * @author simpart
  */
+#include <string.h>
+
 #ifndef __TTR_STRING_H__
 #define __TTR_STRING_H__
 
@@ -17,7 +19,8 @@
 /*** struct ***/
 
 /*** prototype ***/
-int ttrstr_split (const char *, char, unsigned int, char *);
+int ttrstr_split   (const char *, char, unsigned int, char *);
+int ttrstr_filquot (const char *, char *, size_t);
 
 /*** macro ***/
 #define __ttrstr_atoi(num, str)            \
@@ -28,6 +31,7 @@ int ttrstr_split (const char *, char, unsigned int, char *);
     }
 
 #define __ttrstr_iskey(key, chk) if (0 == strncmp(key, chk, TTRSTR_KEYLEN))
+#define __ttrstr_init(s)  memset(s, 0x00, sizeof(s))
 
 #endif
 /* end of file */

@@ -18,7 +18,6 @@ void * ttrmem_malloc(size_t);
 void   ttrmem_free(void **);
 
 /*** macro ***/
-#define __ttrmem_strinit(s)  memset(s, 0x00, sizeof(s))
 #define __ttrmem_ninit(t, n) memset(t, 0x00, n)
 #define __ttrmem_init(t)     __ttrmem_ninit(t, sizeof(t))
 
