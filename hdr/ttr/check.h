@@ -110,6 +110,9 @@
     goto lbl;                                 \
 }
 
+
+#define __ttrchk_retnull(ret) __ttrchk_equal(ret, NULL, "error return value")
+
 #define __ttrchk_retng(ret) __ttrchk_equal(ret, TTR_NG, "error return value")
 
 #define __ttrchk_retng_goto(ret, lbl) __ttrchk_equal_goto(ret, TTR_NG, "error return value", lbl)

@@ -14,6 +14,7 @@
 #include "ttr/string.h"
 #include "ttr/check.h"
 #include "ttr/memory.h"
+#include "ttr/print.h"
 
 #endif
 /* end of file */
