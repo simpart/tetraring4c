@@ -39,10 +39,10 @@ int ttrnw_getaddr (char *ifnm, ttrnw_ipv4_t *v4) {
     struct sockaddr_in *addr = (struct sockaddr_in *) &(ifr.ifr_addr);
     __ttrchk_equal(addr->sin_addr.s_addr, 0, "failed getaddr");
     /* set address */
-    v4->addr[0] = 0xFF       & addr->sin_addr.s_addr;
-    v4->addr[1] = 0xFF00     & addr->sin_addr.s_addr;
-    v4->addr[2] = 0xFF0000   & addr->sin_addr.s_addr;
-    v4->addr[3] = 0xFF000000 & addr->sin_addr.s_addr;
+    v4->addr[0] = 0xFF & addr->sin_addr.s_addr;
+    v4->addr[1] = (0xFF00 & addr->sin_addr.s_addr) >> 8;
+    v4->addr[2] = (0xFF0000 & addr->sin_addr.s_addr) >> 16;
+    v4->addr[3] = (0xFF000000 & addr->sin_addr.s_addr) >> 24;
     
     return TTR_OK;
 }
