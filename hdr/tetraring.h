@@ -15,6 +15,7 @@
 #include "ttr/check.h"
 #include "ttr/memory.h"
 #include "ttr/print.h"
+#include "ttr/trycatch.h"
 
 #endif
 /* end of file */
