@@ -37,11 +37,8 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     __ttr_initval3(iface, sa, rcv_cmp);
     
     /* set ifname */
-    if (strlen( ifnm ) >= sizeof(iface.ifr_name)) {
-        printf("too long ifname\n");
-        return TTR_NG;
-    }
-    strncpy(iface.ifr_name, ifnm, sizeof(iface.ifr_name));
+    __ttrchk_over(strlen(ifnm), sizeof(iface.ifr_name), "too long ifname");
+    strncpy(iface.ifr_name, ifnm, sizeof(iface.ifr_name)-1);
     
     sock = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
     __ttrchk_less(sock, 0, "failed get socket");
@@ -87,11 +84,11 @@ int ttr_nw_init(char *ifnm, uint8_t *buf, size_t size) {
     
     __ttrchk_equal_goto(i, TTR_NW_IFNCT, "could not find receive info", CLOSE_SOCK);
     
+    return sock;
+
 CLOSE_SOCK:
     close(sock);
     return TTR_NG;
-
-    return sock;
 }
 
 /**

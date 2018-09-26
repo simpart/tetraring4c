@@ -27,10 +27,19 @@ typedef struct ttr_nw_rcvinf {
     void    *callback;
 } ttr_nw_rcvinf_t;
 
+typedef struct ttrnw_ipv4 {
+    uchar addr[4];
+} ttrnw_ipv4_t;
+
 /*** prototype ***/
-int ttr_nw_init(char *, uint8_t *, size_t);
-int ttr_nw_rcvloop (int, void (*)(uint8_t *, size_t));
-void * ttr_nw_thdwrp (void *);
-int ttr_nw_rcvloop_thd (int, void (*)(uint8_t *, size_t), pthread_t *);
+
+int    ttr_nw_init        (char *, uint8_t *, size_t);
+int    ttr_nw_rcvloop     (int, void (*)(uint8_t *, size_t));
+void * ttr_nw_thdwrp      (void *);
+int    ttr_nw_rcvloop_thd (int, void (*)(uint8_t *, size_t), pthread_t *);
+
+/* info.c */
+int ttrnw_getaddr (char *, ttrnw_ipv4_t *);
+
 #endif
 /* end of file */

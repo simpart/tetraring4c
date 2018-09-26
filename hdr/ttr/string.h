@@ -37,7 +37,5 @@ int ttrstr_filquot (const char *, char *, size_t);
     len = strnlen(str, max);            \
     __ttrchk_over(len, max-1, "over max string length")
 
-
-
 #endif
 /* end of file */

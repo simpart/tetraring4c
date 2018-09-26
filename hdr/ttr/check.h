@@ -48,6 +48,8 @@
         return TTR_NG;                                   \
     }
 
+#define __ttrchk_nullskip(p) if (NULL == p) return;
+
 #define __ttrchk_signprm(p)                \
     if (0 > p) {                           \
         __ttrdbg_err("invalid parameter"); \

@@ -32,5 +32,7 @@ typedef unsigned long  ulong;
 #define __ttr_strinit2(s1, s2) __ttr_strinit(s1); __ttr_strinit(s2)
 #define __ttr_strinit3(s1, s2, s3) __ttr_strinit(s1); __ttr_strinit(s2); __ttr_strinit(s3)
 
+#define __ttr_limitval(v, m) if (v > m) v = m
+
 #endif
 /* end of file */
