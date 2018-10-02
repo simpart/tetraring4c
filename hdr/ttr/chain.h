@@ -3,11 +3,11 @@
  * @brief  chain function header
  * @author simpart
  */
-/*** include ***/
-#include "ttr/check.h"
-
 #ifndef __TTR_CHAIN_H__
 #define __TTR_CHAIN_H__
+
+/*** include ***/
+#include "ttr/com/check.h"
 
 /*** define ***/
 #define TTRCHN_ID_INIT -1
@@ -23,7 +23,7 @@ typedef struct ttrchn {
 
 /*** prototype ***/
 /* manage */
-int        ttrchn_init    (void);
+void       ttrchn_init    (void);
 ttrchn_t * ttrchn_gethead (int);
 ttrchn_t * ttrchn_getlast (int);
 void       ttrchn_free    (int);

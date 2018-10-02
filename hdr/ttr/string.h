@@ -3,12 +3,11 @@
  * @brief defined string function
  * @author simpart
  */
-#include <string.h>
-
 #ifndef __TTR_STRING_H__
 #define __TTR_STRING_H__
 
 /*** include ***/
+#include <string.h>
 
 /*** define ***/
 #define TTRSTR_SPMAX_LEN 256
@@ -33,9 +32,10 @@ int ttrstr_filquot (const char *, char *, size_t);
 #define __ttrstr_iskey(key, chk) if (0 == strncmp(key, chk, TTRSTR_KEYLEN))
 #define __ttrstr_init(s)  memset(s, 0x00, sizeof(s))
 
-#define __ttrstr_len(len, str, max)     \
-    len = strnlen(str, max);            \
-    __ttrchk_over(len, max-1, "over max string length")
+#define __ttrstr_len(str, len)                  \
+    __ttr_chkerr_value(strnlen(str, len), 0);   \
+    __ttr_chkerr_value(strnlen(str, len), len); \
+    strnlen(str, len)
 
 #endif
 /* end of file */

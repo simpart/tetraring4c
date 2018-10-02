@@ -9,8 +9,6 @@
 #include <string.h>
 #include "ttr/com.h"
 #include "ttr/conf.h"
-#include "ttr/check.h"
-#include "ttr/memory.h"
 
 /*** function ***/
 ttr_conf_t * ttrcnf_load (char *pth) {
@@ -131,7 +129,7 @@ int ttrcnf_free (ttr_conf_t *cnf) {
     }
     do {
         next = tmp->next;
-        __ttrmem_free(tmp);
+        __ttr_free(tmp);
         tmp = (ttr_conf_t *) next;
     } while (NULL != next);
     

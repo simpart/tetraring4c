@@ -1,0 +1,92 @@
+/**
+ * @file arrow.c
+ * @brief print arrow function
+ * @author simpart
+ */
+#include <string.h>
+#include "ttr/com.h"
+#include "ttr/console.h"
+#include "ttr/string.h"
+
+/*** function ***/
+int ttrcon_isarrow_chr (char key) {
+    return (('\x1b' == key) ? TTR_TRUE : TTR_FALSE);
+}
+
+int ttrcon_isup_chr (char key) {
+    return (('A' == key) ? TTR_TRUE : TTR_FALSE);
+}
+
+int ttrcon_isdown_chr (char key) {
+    return (('B' == key)? TTR_TRUE : TTR_FALSE);
+}
+
+int ttrcon_isright_chr (char key) {
+    return (('C' == key)? TTR_TRUE : TTR_FALSE);
+}
+
+int ttrcon_isleft_chr (char key) {
+    return (('D' == key)? TTR_TRUE : TTR_FALSE);
+}
+
+int ttrcon_arrowtype_chr(char key) {
+    switch (key) {
+        case 'A':
+            return TTRCON_ARROW_UP;
+        case 'B':
+            return TTRCON_ARROW_DOWN;
+        case 'C':
+            return TTRCON_ARROW_RIGHT;
+        case 'D':
+            return TTRCON_ARROW_LEFT;
+        default:
+            return TTRCON_ARROW_NMCH;
+    }
+}
+
+int ttrcon_arrowtype (char *str) {
+    if (TTR_TRUE == ttrcon_isup(str)) {
+        return TTRCON_ARROW_UP;
+    } else if (TTR_TRUE == ttrcon_isdown(str)) {
+        return TTRCON_ARROW_DOWN;
+    } else if (TTR_TRUE == ttrcon_isright(str)) {
+        return TTRCON_ARROW_RIGHT;
+    } else if (TTR_TRUE == ttrcon_isleft(str)) {
+        return TTRCON_ARROW_LEFT;
+    } else {
+        return TTRCON_ARROW_NMCH;
+    }
+}
+
+int ttrcon_isup (char * str) {
+    __ttrstr_iskey(TTRCON_ARWSTR_UP, str) {
+        return TTR_TRUE;
+    } else {
+        return TTR_FALSE;
+    }
+}
+
+int ttrcon_isdown (char * str) {
+    __ttrstr_iskey(TTRCON_ARWSTR_DOWN, str) {
+        return TTR_TRUE;
+    } else {
+        return TTR_FALSE;
+    }
+}
+
+int ttrcon_isright (char *str) {
+    __ttrstr_iskey(TTRCON_ARWSTR_RIGHT, str) {
+        return TTR_TRUE;
+    } else {
+        return TTR_FALSE;
+    }
+}
+
+int ttrcon_isleft (char *str) {
+    __ttrstr_iskey(TTRCON_ARWSTR_LEFT, str) {
+        return TTR_TRUE;
+    } else {
+        return TTR_FALSE;
+    }
+}
+/* end of file */

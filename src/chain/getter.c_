@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include "ttr/com.h"
 #include "ttr/chain.h"
-#include "ttr/check.h"
 
 /*** global ***/
 extern ttrchn_t *g_ttrchn_mng;

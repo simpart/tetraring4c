@@ -7,7 +7,6 @@
 #include "pthread.h"
 #include "ttr/com.h"
 #include "ttr/network.h"
-#include "ttr/check.h"
 
 /*** global ***/
 ttr_nw_rcvinf_t g_rcv[TTR_NW_IFNCT];

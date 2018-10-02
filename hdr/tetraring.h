@@ -8,14 +8,10 @@
 #include "ttr/com.h"
 #include "ttr/serial.h"
 #include "ttr/network.h"
-#include "ttr/debug.h"
 #include "ttr/conf.h"
 #include "ttr/chain.h"
 #include "ttr/string.h"
-#include "ttr/check.h"
-#include "ttr/memory.h"
-#include "ttr/print.h"
-#include "ttr/trycatch.h"
+#include "ttr/console.h"
 
 #endif
 /* end of file */

@@ -15,7 +15,6 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include "ttr/com.h"
-#include "ttr/check.h"
 #include "ttr/network.h"
 
 /*** function ***/

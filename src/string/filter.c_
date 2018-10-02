@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "ttr/com.h"
-#include "ttr/check.h"
 
 /*** function ***/
 int ttrstr_filquot (const char *str, char *out, size_t len) {

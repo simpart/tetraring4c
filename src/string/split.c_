@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "ttr/com.h"
-#include "ttr/check.h"
-#include "ttr/memory.h"
 #include "ttr/string.h"
 
 /*** function ***/

@@ -9,8 +9,6 @@
 #include <stdlib.h>
 #include "ttr/com.h"
 #include "ttr/string.h"
-#include "ttr/debug.h"
-#include "ttr/check.h"
 
 /*** function ***/
 void * ttrmem_malloc(size_t siz) {
